@@ -37,29 +37,34 @@ public class ReportsCreateServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String _token = (String)request.getParameter("_token");
+        String _token = (String)request.getParameter("_token");                 //不正アクセスではないかチェック(EmployeesCreateServlet参照)
         if(_token != null && _token.equals(request.getSession().getId())) {
-            EntityManager em = DBUtil.createEntityManager();
+            EntityManager em = DBUtil.createEntityManager();                  //データベースと接続
 
-            Report r = new Report();
+            Report r = new Report();                                            //Report型をインスタンス化(reportテーブルを用意)
 
-            r.setEmployee((Employee)request.getSession().getAttribute("login_employee"));
-
-            Date report_date = new Date(System.currentTimeMillis());
-            String rd_str = request.getParameter("report_date");
-            if(rd_str != null && !rd_str.equals("")) {
-                report_date = Date.valueOf(request.getParameter("report_date"));
+            r.setEmployee((Employee)request.getSession().getAttribute("login_employee"));   //インスタンス化したReport型と繋がっているemployee型に、"login_employee"の情報(id)を入れる。Employee型でキャストする必要あり。
+                                                                                            //ログインしているEmployee型のみのレポートがcreateできるようにするため。
+                                                                                            //受け取った"login_employee"をEmployee型でキャストし、「r」のEmployeeに入れる(setする)。
+            Date report_date = new Date(System.currentTimeMillis());                    //Date型をインスタンス化(名前は"report_date"★)し、このサーブレット(Createサーブレット)にアクセスした時点での現在の日付を初期値として取得する。
+                                                                                           //Newサーブレットでも取得していたので、そこからセッションスコープに入れて送ってきてもよい。(ただし、その場合は最後にremoveする必要があるが…)
+            String rd_str = request.getParameter("report_date");                          //String型をインスタンス化(名前は"rd_str")し、new.jspから送られてきた日付("report_date")を入れる。
+            if(rd_str != null && !rd_str.equals("")) {                                    //"rd_str"が値が入っていた場合、
+                report_date = Date.valueOf(request.getParameter("report_date"));          //new.jspから送られてきた日付("report_date")をDate型でキャストして、このサーブレットでインスタンス化した"report_date"★に上書き。
             }
-            r.setReport_date(report_date);
+            r.setReport_date(report_date);                             //インスタンス化したReport型に"report_date"を入れる。
 
-            r.setTitle(request.getParameter("title"));
-            r.setContent(request.getParameter("content"));
+            r.setTitle(request.getParameter("title"));                 //インスタンス化したReport型の"title"に受け取った"title"を入れる。
+            r.setContent(request.getParameter("content"));             //インスタンス化したReport型の"content"に受け取った"content"を入れる。
 
-            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-            r.setCreated_at(currentTime);
-            r.setUpdated_at(currentTime);
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());      //Timestamp型をインスタンス化して"currentTime"と名付け、現在の時間を入れる。
+            r.setCreated_at(currentTime);                              //インスタンス化したReport型の"created_at"に"currentTime"を入れる。
+            r.setUpdated_at(currentTime);                              //インスタンス化したReport型の"updated_at"に"currentTime"を入れる。
 
-            List<String> errors = ReportValidator.validate(r);
+            r.setLike_count(0);             //いいね数(like_count)の初期値"0"
+
+
+            List<String> errors = ReportValidator.validate(r);        //"errors"という名前のReportValidate型のリスト(エラーメッセージ群)を作成。
             if(errors.size() > 0) {
                 em.close();
 

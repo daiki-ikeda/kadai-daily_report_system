@@ -4,13 +4,13 @@
     <div id="flush_error">
         入力内容にエラーがあります。<br />
         <c:forEach var="error" items="${errors}">
-            ・<c:out value="${error}" /><br />
+            ・<c:out value="${error}" /><br />   <%--EmployeeValidatorサーブレットで作ったリストを表示する。--%>
         </c:forEach>
 
     </div>
 </c:if>
-<label for="code">社員番号</label><br />
-<input type="text" name="code" value="${employee.code}" />
+<label for="code">社員番号</label><br />            <%-- 部品名「社員番号」をクリックしても"code"を指定できる。 --%>
+<input type="text" name="code" value="${employee.code}" />   <%-- 初期値として、employeeオブジェクトのcodeが書かれている。新規登録時(Createサーブレット)は空欄。編集時(Editサーブレット)は初期値がある。 --%>
 <br /><br />
 
 <label for="name">氏名</label><br />
@@ -28,5 +28,5 @@
 </select>
 <br /><br />
 
-<input type="hidden" name="_token" value="${_token}" />
+<input type="hidden" name="_token" value="${_token}" /> <%-- Newサーブレットで取得したセッションId("_token")に、"_token"という名前でCreateサーブレットに送る。 --%>
 <button type="submit">投稿</button>

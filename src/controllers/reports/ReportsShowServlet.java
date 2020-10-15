@@ -32,13 +32,13 @@ public class ReportsShowServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        EntityManager em = DBUtil.createEntityManager();
+        EntityManager em = DBUtil.createEntityManager();      //データベースと接続するおまじない。(データベースに「em」と名付けた。(=DBUtil(DAT)のcreateEntityManagerメソッドを呼び出し、「em」と名付けた))
 
-        Report r = em.find(Report.class, Integer.parseInt(request.getParameter("id")));
+        Report r = em.find(Report.class, Integer.parseInt(request.getParameter("id")));     //topPage/inde.jsp、もしくはreports/index.jspの一覧から、該当のidのReport型のデータを取得する。(Report型をインスタンス化する)
 
         em.close();
 
-        request.setAttribute("report", r);
+        request.setAttribute("report", r);     //取得したのReport型のデータ(内容)に"report"と名付けて、show.jspに送る。
         request.setAttribute("_token", request.getSession().getId());
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/show.jsp");

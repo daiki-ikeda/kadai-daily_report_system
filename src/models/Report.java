@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(
             name = "getAllReports",
-            query = "SELECT r FROM Report AS r ORDER BY r.id DESC"
+            query = "SELECT r FROM Report AS r ORDER BY r.id DESC"        //データベースのReportテーブルに登録されたすべてのデータを取得し、上が小さいidになるように並べる。
             ),
     @NamedQuery(
             name = "getReportsCount",
@@ -27,7 +27,7 @@ import javax.persistence.Table;
             ),
     @NamedQuery(
             name = "getMyAllReports",
-            query = "SELECT r FROM Report AS r WHERE r.employee = :employee ORDER BY r.id DESC"
+            query = "SELECT r FROM Report AS r WHERE r.employee = :employee ORDER BY r.id DESC"        //データベースのReportテーブルに登録されたの内、employeeが送られてきたemployeeと等しいデータを取得し、上が小さいidになるように並べる。
             ),
     @NamedQuery(
             name = "getMyReportsCount",
@@ -42,17 +42,17 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
-
+    @ManyToOne                                               //データベースのほかのテーブル(Employeeテーブル)とつなげる。のに登録されたの内、employeeが送られてきたemployeeと等しいデータを取得し、上が小さいidになるように並べる。
+    @JoinColumn(name = "employee_id", nullable = false)     //"employee_id"というカラムを用意。
+    private Employee employee;                              //Employee型の変数"employee"を定義。
+                                                            //"employee_id"はEmployee型の主キー(id)。主キーは必ず一意になので、これで一つのEmployee型のデータ(レコード)とつながる。
     @Column(name = "report_date", nullable = false)
     private Date report_date;
 
     @Column(name = "title", length = 255, nullable = false)
     private String title;
 
-    @Lob
+    @Lob                                               //Lobアノテーションにより、改行もデータベースに保存できる。
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -61,6 +61,10 @@ public class Report {
 
     @Column(name = "updated_at", nullable = false)
     private Timestamp updated_at;
+
+    @Column(name = "like_count", nullable = false)
+    private Integer like_count;
+
 
     public Integer getId() {
         return id;
@@ -117,4 +121,11 @@ public class Report {
     public void setUpdated_at(Timestamp updated_at) {
         this.updated_at = updated_at;
     }
+
+    public Integer getLike_count() {
+        return like_count;
+    }
+    public void setLike_count(Integer like_count) {
+        this.like_count = like_count;
+   }
 }

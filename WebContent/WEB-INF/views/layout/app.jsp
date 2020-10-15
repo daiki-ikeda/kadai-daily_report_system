@@ -12,9 +12,9 @@
         <div id="wrapper">
             <div id="header">
                 <div id="header_menu">
-                    <h1><a href="<c:url value='/' />">日報管理システム</a></h1>&nbsp;&nbsp;&nbsp;
-                    <c:if test="${sessionScope.login_employee != null}">
-                        <c:if test="${sessionScope.login_employee.admin_flag == 1}">
+                    <h1><a href="<c:url value='/' />">日報管理システム</a></h1>&nbsp;&nbsp;&nbsp;   <%-- 「&nbsp;」一つで半角スペース --%>
+                    <c:if test="${sessionScope.login_employee != null}">                            <%-- 「sessionScope」の「login_employee」に値があれば下記を実行(「!=」とは「≠」のこと) --%>
+                        <c:if test="${sessionScope.login_employee.admin_flag == 1}">                <%-- 「admin_flag」が1(管理者)であれば、下記を実行 --%>
                             <a href="<c:url value='/employees/index' />">従業員管理</a>&nbsp;
                         </c:if>
                         <a href="<c:url value='/reports/index' />">日報管理</a>&nbsp;

@@ -4,7 +4,7 @@
     <c:param name="content">
         <h2>従業員　新規登録ページ</h2>
 
-        <form method="POST" action="<c:url value='/employees/create' />">
+        <form method="POST" action="<c:url value='/employees/create' />">   <%-- new.jspで作った情報をCreateサーブレットに送る --%>
             <c:import url="_form.jsp" />
         </form>
 

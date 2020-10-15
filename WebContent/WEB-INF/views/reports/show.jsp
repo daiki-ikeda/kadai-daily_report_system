@@ -35,12 +35,30 @@
                                 <fmt:formatDate value="${report.updated_at}" pattern="yyyy-MM-dd HH:mm:ss" />
                             </td>
                         </tr>
+                        <c:if test="${sessionScope.login_employee.id == report.employee.id}">
+                            <tr>
+                                <th>いいね数</th>
+                                <td>
+                                    <c:out value="${report.like_count}" />
+                                </td>
+                            </tr>
+                        </c:if>
                     </tbody>
                 </table>
+                <c:choose>
+                   <c:when test="${sessionScope.login_employee.id == report.employee.id}">         <%-- test属性には、trueかfalseを必ず入れる必要がある。そのため、if文やwhen文で使われる。 --%>
+                                                                                              <%-- TopPageIndexサーブレットで、セッションスコープに入れた"login_employee"の"id"を参照。この"report"と繋げた"employee"の"id"と等しければ --%>
+                       <p><a href="<c:url value="/reports/edit?id=${report.id}" />">この日報を編集する</a></p>   <%-- 「この日報を編集する。」を表示。"id"という名前で、ここで開いている"report"の"id"を引数としてEditサーブレットに送る --%>
+                  </c:when>
 
-                <c:if test="${sessionScope.login_employee.id == report.employee.id}">
-                    <p><a href="<c:url value="/reports/edit?id=${report.id}" />">この日報を編集する</a></p>
-                </c:if>
+                  <c:otherwise>
+                  <br /><br />
+                    <form method="POST" action="<c:url value='/reports/likecount?id=${report.id}&report_name=${report.employee.name}&report_tittle=${report.title} ' />">
+                        <input type="hidden" name="like_count" value="${report.like_count}" />
+                        <button type="submit">この日報にいいねをする</button>
+                    </form>
+                  </c:otherwise>
+                </c:choose>
             </c:when>
             <c:otherwise>
                 <h2>お探しのデータは見つかりませんでした。</h2>

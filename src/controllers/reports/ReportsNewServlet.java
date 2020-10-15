@@ -31,10 +31,10 @@ public class ReportsNewServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("_token", request.getSession().getId());
+        request.setAttribute("_token", request.getSession().getId());       //セキュリティーのおまじない。(自動生成したIdを"_token"に入れる。getID(セッションID)は、webアプリにアクセスしたときに自動で生成されるID。DBのIDとは異なる。)
 
-        Report r = new Report();
-        r.setReport_date(new Date(System.currentTimeMillis()));
+        Report r = new Report();                                           //Report型をインスタンス化(reportテーブルを用意)
+        r.setReport_date(new Date(System.currentTimeMillis()));          //Report型の要素"report_date"に現在の日付を入れる。
         request.setAttribute("report", r);
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/new.jsp");

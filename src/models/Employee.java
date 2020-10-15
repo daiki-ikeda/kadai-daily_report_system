@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(
             name = "getAllEmployees",
-            query = "SELECT e FROM Employee AS e ORDER BY e.id DESC"
+            query = "SELECT e FROM Employee AS e ORDER BY e.id DESC"        //データベースのEmployeeテーブルに登録されたすべてのデータを取得し、上が小さいidになるように並べる。
             ),
     @NamedQuery(
             name = "getEmployeesCount",
@@ -23,21 +23,21 @@ import javax.persistence.Table;
             ),
     @NamedQuery(
             name = "checkRegisteredCode",
-            query = "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :code"
+            query = "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :code"   //(Createサーブレットから)getしたcodeが、データベース(e)のcodeと等しい数。既に存在すれば「1」。無ければ「0」
             ),
     @NamedQuery(
             name = "checkLoginCodeAndPassword",
-            query = "SELECT e FROM Employee AS e WHERE e.delete_flag = 0 AND e.code = :code AND e.password = :pass"
+            query = "SELECT e FROM Employee AS e WHERE e.delete_flag = 0 AND e.code = :code AND e.password = :pass"   //"delete_flag"が「0」、つまりデータが削除されていなくて、(Loginサーブレットから)getしたcodeとpassが、データベース(e)のcodeとpasswordと等しいデータを取得
             )
 })
 @Entity
 public class Employee {
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")            //カラム名：id(通し番号)を設定。
+    @GeneratedValue(strategy = GenerationType.IDENTITY)            // @GeneratedValueにより、"id"が自動生成される。 GenerationTypeをIDENTITYとすることで、自動で増分される。
     private Integer id;
 
-    @Column(name = "code", nullable = false, unique = true)
+    @Column(name = "code", nullable = false, unique = true)       //カラム名：code(社員番号)を設定。
     private String code;
 
     @Column(name = "name", nullable = false)
@@ -58,11 +58,11 @@ public class Employee {
     @Column(name = "delete_flag", nullable = false)
     private Integer delete_flag;
 
-    public Integer getId() {
+    public Integer getId() {            //getId()でid(社員番号)を受け取る。
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id) {     //SetId(引数)で、受け取った引数をid(社員番号)に入れる。
         this.id = id;
     }
 

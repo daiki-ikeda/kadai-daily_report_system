@@ -35,8 +35,9 @@ public class ReportsEditServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EntityManager em = DBUtil.createEntityManager();
 
-        Report r = em.find(Report.class, Integer.parseInt(request.getParameter("id")));
-
+        Report r = em.find(Report.class, Integer.parseInt(request.getParameter("id")));         //show.jspから"/reports/edit?id=${report.id}"で、このサーブレットに「reportのid」送り、引数として受け取る。
+                                                                                                 //request.getParameter("id")は数字だが、String型なので、integer.paseInt()でキャストする。
+                                                                                                 //findメソッドで、受け取った"id"の"report"(Report型)をインスタンス化。find(データ型、主キー)
         em.close();
 
         Employee login_employee = (Employee)request.getSession().getAttribute("login_employee");
